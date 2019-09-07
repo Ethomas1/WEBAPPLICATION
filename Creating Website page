@@ -1,0 +1,44 @@
+var express = require('express');
+var mysql = require('mysql');
+var app= express();
+
+
+var connection = mysql.createConnection({
+  host     : 'localhost',
+  user     : 'root',  //your username
+  database : 'join_us'         //the name of your db
+});
+
+
+app.get("/", function(req,res){
+	//find the count of user in DB
+	var q= "SELECT COUNT(*) AS count FROM users"
+	connection.query(q,function(err,results){
+		if(err) throw err
+		var count= results[0].count;
+		res.send("You have "+ count +"users in our database");
+	});
+	// Respond with tha count
+// res.send("You have " +count +" in our Database");
+//console.log(results[0].count);
+});
+
+app.get("/joke", function(req,res){
+	var joke="What you call a dog whoe do magic: abracaradabra";
+	console.log("Requested the joke ROUTE");
+	res.send(joke);
+});
+
+app.get("/random",function(req,res){
+	var num= Math.floor(Math.random()* 10)+1;
+	res.send("Your Lucky number is "+num);
+}
+);
+
+app.listen(3000, function(){
+    console.log("Server Listening to 3000!");
+});
+
+
+
+
